@@ -3,6 +3,7 @@ package fetcher
 import (
 	"encoding/json"
 	"log"
+	"strconv"
 
 	"github.com/berberapan/dota-work/internal/utils"
 )
@@ -38,4 +39,13 @@ func GetListOfMatchesFromDate(fromDate, teamId string) []TeamHistory {
 		matchHistorySlice = append(matchHistorySlice, match)
 	}
 	return matchHistorySlice
+}
+
+func GetMatchDataFromTeamHistorySlice(matches []TeamHistory) []MatchData {
+	sliceOfMatches := []MatchData{}
+	for _, match := range matches {
+		matchID := strconv.Itoa(match.MatchId)
+		sliceOfMatches = append(sliceOfMatches, GetMatchData(matchID))
+	}
+	return sliceOfMatches
 }

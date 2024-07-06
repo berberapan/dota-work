@@ -4,18 +4,10 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"strings"
 
-	"github.com/joho/godotenv"
+	"github.com/berberapan/dota-work/internal/utils"
 )
-
-func getEnvVariable(key string) string {
-	if err := godotenv.Load("../.env"); err != nil {
-		log.Fatalf("Unable to load .env file. \nError message: %s", err)
-	}
-	return os.Getenv(key)
-}
 
 func fetchDataFromApi(url string) []byte {
 	response, err := http.Get(url)
@@ -34,13 +26,13 @@ func fetchDataFromApi(url string) []byte {
 }
 
 func getTeamMatchHistoryApi(teamID string) []byte {
-	envString := getEnvVariable("URL_TEAM_API")
+	envString := utils.GetEnvVariable("URL_TEAM_API")
 	url := strings.Replace(envString, "{team_id}", teamID, 1)
 	return fetchDataFromApi(url)
 }
 
 func getMatchDataApi(matchID string) []byte {
-	envString := getEnvVariable("URL_MATCH_API")
+	envString := utils.GetEnvVariable("URL_MATCH_API")
 	url := strings.Replace(envString, "{match_id}", matchID, 1)
 	return fetchDataFromApi(url)
 }
