@@ -24,7 +24,7 @@ func NewServer(listenAddr string, router *http.ServeMux, db *sql.DB) *Server {
 
 func (s *Server) setupRoutes() {
 	subrouter := http.NewServeMux()
-	fs := http.FileServer(http.Dir("./web/templates"))
+	fs := http.FileServer(http.Dir("./web"))
 
 	subrouter.HandleFunc("GET /healthz", handlers.HealthCheck)
 
