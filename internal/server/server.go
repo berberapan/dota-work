@@ -24,12 +24,12 @@ func NewServer(listenAddr string, router *http.ServeMux, db *sql.DB) *Server {
 
 func (s *Server) setupRoutes() {
 	subrouter := http.NewServeMux()
-	fs := http.FileServer(http.Dir("./web"))
+	fs := http.FileServer(http.Dir("./web/dist"))
+	s.router.Handle("/app/", http.StripPrefix("/app", fs))
+
+	s.router.Handle("/v1/", http.StripPrefix("/v1", subrouter))
 
 	subrouter.HandleFunc("GET /healthz", handlers.HealthCheck)
-
-	s.router.Handle("/app/", http.StripPrefix("/app", fs))
-	s.router.Handle("/v1/", http.StripPrefix("/v1", subrouter))
 }
 
 func (s *Server) Run() error {
