@@ -25,3 +25,27 @@ type TeamHistory struct {
 	MatchId   int `json:"match_id"`
 	StartTime int `json:"start_time"`
 }
+
+type CompiledTeamData struct {
+	TeamID          int               `json:"team_id"`
+	NumberOfMatches int               `json:"number_of_matches"`
+	AllMatches      CompiledMatchData `json:"all_matches"`
+	WonMatches      CompiledMatchData `json:"won_matches"`
+	RadiantMatches  CompiledMatchData `json:"radiant_matches"`
+}
+
+type CompiledMatchData struct {
+	AverageDuration      string  `json:"average_duration"`
+	MedianDuration       string  `json:"median_duration"`
+	TeamTowersAverage    float64 `json:"team_towers_average"`
+	TotalTowersAverage   float64 `json:"total_towers_average"`
+	FirstTowerPct        float64 `json:"first_tower_pct"`
+	TeamBarracksAverage  float64 `json:"team_barracks_average"`
+	TotalBarracksAverage float64 `json:"total_barracks_average"`
+	FirstBarrackPct      float64 `json:"first_barrack_pct"`
+	TeamScoreAverage     float64 `json:"team_score_average"`
+	TeamScoreMedian      int     `json:"team_score_median"`
+	TotalScoreAverage    float64 `json:"total_score_average"`
+	TotalScoreMedian     int     `json:"total_score_median"`
+	FirstBloodPct        float64 `json:"first_blood_pct"`
+}

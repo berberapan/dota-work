@@ -23,6 +23,12 @@ func ConvertDateToUnix(date string) int {
 	return int(utcTime.Unix())
 }
 
+func ConvertSecondsToFormattedString(duration int) string {
+	minutes := duration / 60
+	seconds := duration % 60
+	return fmt.Sprintf("%dm%ds", minutes, seconds)
+}
+
 func GetEnvVariable(key string) string {
 	path, err := os.Executable()
 	if err != nil {
