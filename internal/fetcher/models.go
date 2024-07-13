@@ -3,7 +3,7 @@ package fetcher
 type MatchData struct {
 	Objectives            []Objective `json:"objectives"`
 	StartTime             int         `json:"start_time"`
-	Duration              int         `json:"duration"`
+	Duration              float64     `json:"duration"`
 	RadiantWin            bool        `json:"radiant_win"`
 	TowerStatusRadiant    int         `json:"tower_status_radiant"`
 	TowerStatusDire       int         `json:"tower_status_dire"`
@@ -15,10 +15,11 @@ type MatchData struct {
 }
 
 type Objective struct {
-	Time int         `json:"time"`
-	Type string      `json:"type"`
-	Key  interface{} `json:"key,omitempty"`
-	Team int         `json:"team,omitempty"`
+	Time       int         `json:"time"`
+	Type       string      `json:"type"`
+	Key        interface{} `json:"key,omitempty"`
+	Team       int         `json:"team,omitempty"`
+	PlayerSlot int         `json:"player_slot,omitempty"`
 }
 
 type TeamHistory struct {
@@ -31,21 +32,37 @@ type CompiledTeamData struct {
 	NumberOfMatches int               `json:"number_of_matches"`
 	AllMatches      CompiledMatchData `json:"all_matches"`
 	WonMatches      CompiledMatchData `json:"won_matches"`
+	LostMatches     CompiledMatchData `json:"lost_matches"`
 	RadiantMatches  CompiledMatchData `json:"radiant_matches"`
+	DireMatches     CompiledMatchData `json:"dire_matches"`
 }
 
 type CompiledMatchData struct {
-	AverageDuration      string  `json:"average_duration"`
-	MedianDuration       string  `json:"median_duration"`
-	TeamTowersAverage    float64 `json:"team_towers_average"`
-	TotalTowersAverage   float64 `json:"total_towers_average"`
-	FirstTowerPct        float64 `json:"first_tower_pct"`
-	TeamBarracksAverage  float64 `json:"team_barracks_average"`
-	TotalBarracksAverage float64 `json:"total_barracks_average"`
-	FirstBarrackPct      float64 `json:"first_barrack_pct"`
-	TeamScoreAverage     float64 `json:"team_score_average"`
-	TeamScoreMedian      int     `json:"team_score_median"`
-	TotalScoreAverage    float64 `json:"total_score_average"`
-	TotalScoreMedian     int     `json:"total_score_median"`
-	FirstBloodPct        float64 `json:"first_blood_pct"`
+	AverageDuration      string    `json:"average_duration"`
+	MedianDuration       string    `json:"median_duration"`
+	TeamTowersAverage    float64   `json:"team_towers_average"`
+	TeamTowersMedian     float64   `json:"team_towers_median"`
+	TotalTowersAverage   float64   `json:"total_towers_average"`
+	TotalTowersMedian    float64   `json:"total_towers_median"`
+	FirstTowerPct        float64   `json:"first_tower_pct"`
+	TeamBarracksAverage  float64   `json:"team_barracks_average"`
+	TeamBarracksMedian   float64   `json:"team_barracks_median"`
+	TotalBarracksAverage float64   `json:"total_barracks_average"`
+	TotalBarracksMedian  float64   `json:"total_barracks_median"`
+	FirstBarrackPct      float64   `json:"first_barrack_pct"`
+	TeamScoreAverage     float64   `json:"team_score_average"`
+	TeamScoreMedian      float64   `json:"team_score_median"`
+	TotalScoreAverage    float64   `json:"total_score_average"`
+	TotalScoreMedian     float64   `json:"total_score_median"`
+	FirstBloodPct        float64   `json:"first_blood_pct"`
+	Durations            []float64 `json:"-"`
+	TeamTowers           []int     `json:"-"`
+	TowerTotals          []int     `json:"-"`
+	TeamBarracks         []int     `json:"-"`
+	BarrackTotals        []int     `json:"-"`
+	TeamScores           []int     `json:"-"`
+	ScoreTotals          []int     `json:"-"`
+	FirstTower           []int     `json:"-"`
+	FirstBarrack         []int     `json:"-"`
+	FirstBlood           []int     `json:"-"`
 }
