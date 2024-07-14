@@ -30,6 +30,7 @@ func (s *Server) setupRoutes() {
 	s.router.Handle("/v1/", http.StripPrefix("/v1", subrouter))
 
 	subrouter.HandleFunc("GET /healthz", handlers.HealthCheck)
+	subrouter.HandleFunc("POST /teamdata", handlers.GetTeamData)
 }
 
 func (s *Server) Run() error {
