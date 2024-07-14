@@ -115,12 +115,11 @@ func updateMatchData(data *CompiledMatchData, match MatchData, isRadiant bool) {
 	firstTower := -1
 	firstBarrack := -1
 	firstBlood := -1
+	firstRoshan := -1
+	totalRoshan := 0
+	teamRoshan := 0
 
 	for _, objective := range match.Objectives {
-
-		if firstTower != -1 && firstBarrack != -1 && firstBlood != -1 {
-			break
-		}
 
 		if objective.Type == "CHAT_MESSAGE_FIRSTBLOOD" {
 			if objective.PlayerSlot < 5 && isRadiant {
@@ -157,11 +156,36 @@ func updateMatchData(data *CompiledMatchData, match MatchData, isRadiant bool) {
 				}
 			}
 		}
+
+		if objective.Type == "CHAT_MESSAGE_ROSHAN_KILL" {
+			switch {
+			case objective.Team == 2 && isRadiant:
+				teamRoshan++
+				totalRoshan++
+				if firstRoshan == -1 {
+					firstRoshan = 1
+				}
+			case objective.Team == 3 && !isRadiant:
+				teamRoshan++
+				totalRoshan++
+				if firstRoshan == -1 {
+					firstRoshan = 1
+				}
+			default:
+				totalRoshan++
+				if firstRoshan == -1 {
+					firstRoshan = 0
+				}
+			}
+		}
 	}
 
 	data.FirstTower = append(data.FirstTower, firstTower)
 	data.FirstBarrack = append(data.FirstBarrack, firstBarrack)
 	data.FirstBlood = append(data.FirstBlood, firstBlood)
+	data.FirstRoshan = append(data.FirstRoshan, firstRoshan)
+	data.TeamRoshans = append(data.TeamRoshans, teamRoshan)
+	data.RoshanTotals = append(data.RoshanTotals, totalRoshan)
 }
 
 func calculateTeamData(data *CompiledTeamData) {
@@ -209,6 +233,17 @@ func calculateMatchData(data *CompiledMatchData) {
 	}
 	if len(data.FirstBlood) > 0 {
 		data.FirstBloodPct = utils.CalculatePercentageFromIntSlice(data.FirstBlood)
+	}
+	if len(data.FirstRoshan) > 0 {
+		data.FirstRoshanPct = utils.CalculatePercentageFromIntSlice(data.FirstRoshan)
+	}
+	if len(data.TeamRoshans) > 0 {
+		data.TeamRoshanAverage = utils.CalculateAverageFromIntSlice(data.TeamRoshans)
+		data.TeamRoshanMedian = utils.CalculateMedianFromIntSlice(data.TeamRoshans)
+	}
+	if len(data.RoshanTotals) > 0 {
+		data.TotalRoshansAverage = utils.CalculateAverageFromIntSlice(data.RoshanTotals)
+		data.TotalRoshansMedian = utils.CalculateMedianFromIntSlice(data.RoshanTotals)
 	}
 }
 

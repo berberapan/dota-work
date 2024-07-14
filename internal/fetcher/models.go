@@ -55,6 +55,11 @@ type CompiledMatchData struct {
 	TotalScoreAverage    float64   `json:"total_score_average"`
 	TotalScoreMedian     float64   `json:"total_score_median"`
 	FirstBloodPct        float64   `json:"first_blood_pct"`
+	TeamRoshanAverage    float64   `json:"team_roshan_average"`
+	TeamRoshanMedian     float64   `json:"team_roshan_median"`
+	TotalRoshansAverage  float64   `json:"total_roshans_average"`
+	TotalRoshansMedian   float64   `json:"total_roshans_median"`
+	FirstRoshanPct       float64   `json:"first_roshan_pct"`
 	Durations            []float64 `json:"-"`
 	TeamTowers           []int     `json:"-"`
 	TowerTotals          []int     `json:"-"`
@@ -65,4 +70,7 @@ type CompiledMatchData struct {
 	FirstTower           []int     `json:"-"`
 	FirstBarrack         []int     `json:"-"`
 	FirstBlood           []int     `json:"-"`
+	TeamRoshans          []int     `json:"-"`
+	RoshanTotals         []int     `json:"-"`
+	FirstRoshan          []int     `json:"-"`
 }
