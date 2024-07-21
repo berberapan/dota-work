@@ -74,3 +74,14 @@ type CompiledMatchData struct {
 	RoshanTotals         []int     `json:"-"`
 	FirstRoshan          []int     `json:"-"`
 }
+
+type MatchScheduleData struct {
+	TeamA      string `json:"team_a"`
+	TeamB      string `json:"team_b"`
+	Tournament string `json:"tournament"`
+	LeagueCode int    `json:"league_code"`
+	BestOf     int    `json:"best_of"`
+	Date       string `json:"date"`
+	StartTime  string `json:"start_time"`
+	Game       string `json:"game"`
+}
