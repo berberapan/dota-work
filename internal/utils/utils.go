@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -11,6 +12,14 @@ import (
 
 	"github.com/joho/godotenv"
 )
+
+func DataStructToJson[T any](data T) ([]byte, error) {
+	jsonData, err := json.Marshal(data)
+	if err != nil {
+		return nil, fmt.Errorf("Unable to marshal given struct.\n%w", err)
+	}
+	return jsonData, nil
+}
 
 func ConvertDateToUnix(date string) int {
 	layout := "2006-01-02"

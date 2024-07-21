@@ -246,11 +246,3 @@ func calculateMatchData(data *CompiledMatchData) {
 		data.TotalRoshansMedian = utils.CalculateMedianFromIntSlice(data.RoshanTotals)
 	}
 }
-
-func DataStructToJson(data CompiledTeamData) []byte {
-	jsonData, err := json.Marshal(data)
-	if err != nil {
-		log.Println(err)
-	}
-	return jsonData
-}

@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/berberapan/dota-work/internal/fetcher"
+	"github.com/berberapan/dota-work/internal/utils"
 )
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
@@ -38,7 +40,10 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 		matchHistory := fetcher.GetListOfMatchesFromDate(date, id)
 		matchSlice := fetcher.GetMatchDataFromTeamHistorySlice(matchHistory)
 		compiledData := fetcher.ProcessMatchData(matchSlice, id)
-		jsonData = fetcher.DataStructToJson(compiledData)
+		jsonData, err = utils.DataStructToJson(compiledData)
+		if err != nil {
+			log.Println(err)
+		}
 
 	} else if count != "" {
 		conCount, err := strconv.Atoi(count)
@@ -49,7 +54,10 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 		matchHistory := fetcher.GetListOfMatchesFromCount(conCount, id)
 		matchSlice := fetcher.GetMatchDataFromTeamHistorySlice(matchHistory)
 		compiledData := fetcher.ProcessMatchData(matchSlice, id)
-		jsonData = fetcher.DataStructToJson(compiledData)
+		jsonData, err = utils.DataStructToJson(compiledData)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")
