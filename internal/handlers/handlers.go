@@ -16,6 +16,8 @@ func HealthCheck(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetTeamData(w http.ResponseWriter, r *http.Request) {
+	log.Println("Request for GetTeamData received.")
+
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Error parsing form", http.StatusBadRequest)
@@ -34,10 +36,16 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Printf("Params received - Team ID %s, Date %s, Count %s", id, date, count)
+
 	var jsonData []byte
 
 	if date != "" {
 		matchHistory := fetcher.GetListOfMatchesFromDate(date, id)
+		if len(matchHistory) == 0 {
+			http.Error(w, "No matches found.", http.StatusNotFound)
+			return
+		}
 		matchSlice := fetcher.GetMatchDataFromTeamHistorySlice(matchHistory)
 		compiledData := fetcher.ProcessMatchData(matchSlice, id)
 		jsonData, err = utils.DataStructToJson(compiledData)
@@ -52,6 +60,10 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		matchHistory := fetcher.GetListOfMatchesFromCount(conCount, id)
+		if len(matchHistory) == 0 {
+			http.Error(w, "No matches found.", http.StatusNotFound)
+			return
+		}
 		matchSlice := fetcher.GetMatchDataFromTeamHistorySlice(matchHistory)
 		compiledData := fetcher.ProcessMatchData(matchSlice, id)
 		jsonData, err = utils.DataStructToJson(compiledData)
@@ -60,7 +72,41 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	log.Println("Sending back response")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	w.Write(jsonData)
+}
+
+func GetTournamentSchedule(w http.ResponseWriter, r *http.Request) {
+	log.Println("Request for GetTournamentSchedule received.")
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return
+	}
+	url := r.FormValue("url")
+	if url == "" {
+		http.Error(w, "Missing required parameter Liquipedia tournament url", http.StatusBadRequest)
+		return
+	}
+	leagueCode := r.FormValue("league-code")
+	if leagueCode == "" {
+		http.Error(w, "Missing required parameter league code", http.StatusBadRequest)
+	}
+
+	log.Printf("Params received - URL %s, LeagueCode %s", url, leagueCode)
+
+	data := fetcher.GetScheduleOfTournament(url, leagueCode)
+	jsonData, err := utils.DataStructToJson(data)
+	if err != nil {
+		log.Println("Error marshaling JSON:", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	log.Println("Sending back response")
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
 }

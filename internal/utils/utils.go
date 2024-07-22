@@ -58,6 +58,9 @@ func ConvertBinIntToCount(number, width int) int {
 }
 
 func CalculateAverageFromIntSlice(numbers []int) float64 {
+	if len(numbers) == 0 {
+		return 0
+	}
 	sum := 0
 	for _, n := range numbers {
 		sum += n
@@ -66,6 +69,9 @@ func CalculateAverageFromIntSlice(numbers []int) float64 {
 }
 
 func CalculateMedianFromIntSlice(numbers []int) float64 {
+	if len(numbers) == 0 {
+		return 0
+	}
 	slices.Sort(numbers)
 	length := len(numbers)
 	if length%2 == 0 {
@@ -75,6 +81,9 @@ func CalculateMedianFromIntSlice(numbers []int) float64 {
 }
 
 func CalculateAverageFromFloatSlice(numbers []float64) float64 {
+	if len(numbers) == 0 {
+		return 0
+	}
 	sum := 0.0
 	for _, n := range numbers {
 		sum += n
@@ -83,6 +92,9 @@ func CalculateAverageFromFloatSlice(numbers []float64) float64 {
 }
 
 func CalculateMedianFromFloatSlice(numbers []float64) float64 {
+	if len(numbers) == 0 {
+		return 0
+	}
 	slices.Sort(numbers)
 	length := len(numbers)
 	if length%2 == 0 {
@@ -100,6 +112,9 @@ func CalculatePercentageFromIntSlice(numbers []int) float64 {
 		}
 		count++
 		sum += n
+	}
+	if count == 0 {
+		return 0
 	}
 	return float64(sum) / float64(count)
 }

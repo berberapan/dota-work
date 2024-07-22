@@ -45,8 +45,11 @@ func GetListOfMatchesFromDate(fromDate, teamId string) []TeamHistory {
 func GetListOfMatchesFromCount(num int, teamId string) []TeamHistory {
 	matchHistorySlice := []TeamHistory{}
 	listOfMatches := GetListOfMatches(teamId)
-	for n := range num {
-		matchHistorySlice = append(matchHistorySlice, listOfMatches[n])
+	if num > len(listOfMatches) {
+		num = len(listOfMatches)
+	}
+	for i := 0; i < num; i++ {
+		matchHistorySlice = append(matchHistorySlice, listOfMatches[i])
 	}
 	return matchHistorySlice
 }

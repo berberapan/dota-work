@@ -31,6 +31,7 @@ func (s *Server) setupRoutes() {
 
 	subrouter.HandleFunc("GET /healthz", handlers.HealthCheck)
 	subrouter.HandleFunc("POST /teamdata", handlers.GetTeamData)
+	subrouter.HandleFunc("POST /tournamentschedule", handlers.GetTournamentSchedule)
 }
 
 func (s *Server) Run() error {
