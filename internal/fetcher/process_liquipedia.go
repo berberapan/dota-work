@@ -61,7 +61,9 @@ func GetScheduleOfTournament(url, leagueCode string) []MatchScheduleData {
 		if isMatch {
 			currentMatch.updateFromLine(line)
 			if currentMatch.isComplete() {
-				schedule = append(schedule, createMatchScheduleData(currentMatch, tournamentName, leagueCodeInt))
+				if currentMatch.dateTime != defaultTime {
+					schedule = append(schedule, createMatchScheduleData(currentMatch, tournamentName, leagueCodeInt))
+				}
 				isMatch = false
 				bestOf = currentMatch.bestOf
 			}
@@ -121,7 +123,12 @@ func extractIntValue(line string) (int, error) {
 func extractTournamentName(lines []string) string {
 	for _, line := range lines {
 		if strings.Contains(line, "tickername") {
-			return strings.TrimSpace(line[strings.Index(line, "=")+1:])
+			tickerLine := line[strings.Index(line, "tickername"):]
+			lastIdx := len(tickerLine)
+			if strings.Contains(tickerLine, "|") {
+				lastIdx = strings.Index(tickerLine, "|")
+			}
+			return strings.TrimSpace(tickerLine[strings.Index(tickerLine, "=")+1 : lastIdx])
 		}
 	}
 	return ""

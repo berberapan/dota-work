@@ -183,16 +183,10 @@ func LiquipediaUrlToTournamentString(url string) (string, error) {
 func ConvertTimeToString(startTime time.Time) string {
 	hour := startTime.Hour()
 	minute := startTime.Minute()
-	switch {
-	case hour < 10 && minute < 10:
-		return fmt.Sprintf("0%v0%v", hour, minute)
-	case hour < 10:
-		return fmt.Sprintf("0%v%v", hour, minute)
-	case minute < 10:
+	if minute < 10 {
 		return fmt.Sprintf("%v0%v", hour, minute)
-	default:
-		return fmt.Sprintf("%v%v", hour, minute)
 	}
+	return fmt.Sprintf("%v%v", hour, minute)
 }
 
 func ConvertDateToString(startTime time.Time) string {
