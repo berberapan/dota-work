@@ -9,7 +9,7 @@ import (
 
 func main() {
 	router := http.NewServeMux()
-	newServer := server.NewServer(":8080", router, nil)
+	newServer := server.NewServer(":80", ":443", router, nil)
 	if err := newServer.Run(); err != nil {
 		log.Fatal(err)
 	}

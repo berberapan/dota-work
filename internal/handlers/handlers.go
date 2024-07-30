@@ -74,6 +74,10 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Sending back response")
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
 	w.WriteHeader(http.StatusOK)
 	w.Write(jsonData)
 }
@@ -108,5 +112,8 @@ func GetTournamentSchedule(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Sending back response")
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 	w.Write(jsonData)
 }

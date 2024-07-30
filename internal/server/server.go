@@ -9,16 +9,18 @@ import (
 )
 
 type Server struct {
-	listenAddr string
-	router     *http.ServeMux
-	db         *sql.DB
+	httpAddr  string
+	httpsAddr string
+	router    *http.ServeMux
+	db        *sql.DB
 }
 
-func NewServer(listenAddr string, router *http.ServeMux, db *sql.DB) *Server {
+func NewServer(httpAddr, httpsAddr string, router *http.ServeMux, db *sql.DB) *Server {
 	return &Server{
-		listenAddr: listenAddr,
-		router:     router,
-		db:         db,
+		httpAddr:  httpAddr,
+		httpsAddr: httpsAddr,
+		router:    router,
+		db:        db,
 	}
 }
 
@@ -36,6 +38,21 @@ func (s *Server) setupRoutes() {
 
 func (s *Server) Run() error {
 	s.setupRoutes()
-	log.Printf("Server starting and listening on %s", s.listenAddr)
-	return http.ListenAndServe(s.listenAddr, s.router)
+
+	go func() {
+		log.Printf("HTTP server starting on  %s (redirecting to HTTPS)", s.httpAddr)
+		if err := http.ListenAndServe(s.httpAddr, http.HandlerFunc(s.redirectTLS)); err != nil {
+			log.Fatalf("HTTP ListenAndServe error: %v", err)
+		}
+	}()
+
+	log.Printf("HTTPS server starting on %s", s.httpsAddr)
+	return http.ListenAndServeTLS(s.httpsAddr,
+		"/etc/letsencrypt/live/dota.boukdir.se/fullchain.pem",
+		"/etc/letsencrypt/live/dota.boukdir.se/privkey.pem",
+		s.router)
+}
+
+func (s *Server) redirectTLS(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "https://"+r.Host+r.RequestURI, http.StatusMovedPermanently)
 }
