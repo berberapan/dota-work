@@ -200,6 +200,7 @@ func calculateTeamData(data *CompiledTeamData) {
 }
 
 func calculateMatchData(data *CompiledMatchData) {
+	data.NumberOfMaps = len(data.Durations)
 	if len(data.Durations) > 0 {
 		data.AverageDuration = utils.ConvertSecondsToFormattedString(utils.CalculateAverageFromFloatSlice(data.Durations))
 		data.MedianDuration = utils.ConvertSecondsToFormattedString(utils.CalculateMedianFromFloatSlice(data.Durations))
@@ -207,26 +208,32 @@ func calculateMatchData(data *CompiledMatchData) {
 	if len(data.TeamTowers) > 0 {
 		data.TeamTowersAverage = utils.CalculateAverageFromIntSlice(data.TeamTowers)
 		data.TeamTowersMedian = utils.CalculateMedianFromIntSlice(data.TeamTowers)
+		data.TeamTowersMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.TeamTowers))
 	}
 	if len(data.TowerTotals) > 0 {
 		data.TotalTowersAverage = utils.CalculateAverageFromIntSlice(data.TowerTotals)
 		data.TotalTowersMedian = utils.CalculateMedianFromIntSlice(data.TowerTotals)
+		data.TotalTowersMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.TowerTotals))
 	}
 	if len(data.TeamBarracks) > 0 {
 		data.TeamBarracksAverage = utils.CalculateAverageFromIntSlice(data.TeamBarracks)
 		data.TeamBarracksMedian = utils.CalculateMedianFromIntSlice(data.TeamBarracks)
+		data.TeamBarracksMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.TeamBarracks))
 	}
 	if len(data.BarrackTotals) > 0 {
 		data.TotalBarracksAverage = utils.CalculateAverageFromIntSlice(data.BarrackTotals)
 		data.TotalBarracksMedian = utils.CalculateMedianFromIntSlice(data.BarrackTotals)
+		data.TotalBarracksMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.BarrackTotals))
 	}
 	if len(data.TeamScores) > 0 {
 		data.TeamScoreAverage = utils.CalculateAverageFromIntSlice(data.TeamScores)
 		data.TeamScoreMedian = utils.CalculateMedianFromIntSlice(data.TeamScores)
+		data.TeamScoreMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.TeamScores))
 	}
 	if len(data.ScoreTotals) > 0 {
 		data.TotalScoreAverage = utils.CalculateAverageFromIntSlice(data.ScoreTotals)
 		data.TotalScoreMedian = utils.CalculateMedianFromIntSlice(data.ScoreTotals)
+		data.TotalScoreMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.ScoreTotals))
 	}
 	if len(data.FirstTower) > 0 {
 		data.FirstTowerPct = utils.CalculatePercentageFromIntSlice(data.FirstTower)
@@ -243,9 +250,11 @@ func calculateMatchData(data *CompiledMatchData) {
 	if len(data.TeamRoshans) > 0 {
 		data.TeamRoshanAverage = utils.CalculateAverageFromIntSlice(data.TeamRoshans)
 		data.TeamRoshanMedian = utils.CalculateMedianFromIntSlice(data.TeamRoshans)
+		data.TeamRoshanMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.TeamRoshans))
 	}
 	if len(data.RoshanTotals) > 0 {
 		data.TotalRoshansAverage = utils.CalculateAverageFromIntSlice(data.RoshanTotals)
 		data.TotalRoshansMedian = utils.CalculateMedianFromIntSlice(data.RoshanTotals)
+		data.TotalRoshansMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.RoshanTotals))
 	}
 }

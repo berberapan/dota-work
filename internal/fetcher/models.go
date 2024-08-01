@@ -38,27 +38,36 @@ type CompiledTeamData struct {
 }
 
 type CompiledMatchData struct {
+	NumberOfMaps         int       `json:"number_of_maps"`
 	AverageDuration      string    `json:"average_duration"`
 	MedianDuration       string    `json:"median_duration"`
 	TeamTowersAverage    float64   `json:"team_towers_average"`
 	TeamTowersMedian     float64   `json:"team_towers_median"`
+	TeamTowersMode       string    `json:"team_towers_mode"`
 	TotalTowersAverage   float64   `json:"total_towers_average"`
 	TotalTowersMedian    float64   `json:"total_towers_median"`
+	TotalTowersMode      string    `json:"total_towers_mode"`
 	FirstTowerPct        float64   `json:"first_tower_pct"`
 	TeamBarracksAverage  float64   `json:"team_barracks_average"`
 	TeamBarracksMedian   float64   `json:"team_barracks_median"`
+	TeamBarracksMode     string    `json:"team_barracks_mode"`
 	TotalBarracksAverage float64   `json:"total_barracks_average"`
 	TotalBarracksMedian  float64   `json:"total_barracks_median"`
+	TotalBarracksMode    string    `json:"total_barracks_mode"`
 	FirstBarrackPct      float64   `json:"first_barrack_pct"`
 	TeamScoreAverage     float64   `json:"team_score_average"`
 	TeamScoreMedian      float64   `json:"team_score_median"`
+	TeamScoreMode        string    `json:"team_score_mode"`
 	TotalScoreAverage    float64   `json:"total_score_average"`
 	TotalScoreMedian     float64   `json:"total_score_median"`
+	TotalScoreMode       string    `json:"total_score_mode"`
 	FirstBloodPct        float64   `json:"first_blood_pct"`
 	TeamRoshanAverage    float64   `json:"team_roshan_average"`
 	TeamRoshanMedian     float64   `json:"team_roshan_median"`
+	TeamRoshanMode       string    `json:"team_roshan_mode"`
 	TotalRoshansAverage  float64   `json:"total_roshans_average"`
 	TotalRoshansMedian   float64   `json:"total_roshans_median"`
+	TotalRoshansMode     string    `json:"total_roshans_mode"`
 	FirstRoshanPct       float64   `json:"first_roshan_pct"`
 	Durations            []float64 `json:"-"`
 	TeamTowers           []int     `json:"-"`

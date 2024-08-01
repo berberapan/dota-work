@@ -80,6 +80,41 @@ func CalculateMedianFromIntSlice(numbers []int) float64 {
 	return float64(numbers[length/2])
 }
 
+func CalculateModeFromIntSlice(numbers []int) []int {
+	var mode []int
+	if len(numbers) == 0 {
+		return nil
+	}
+	freq := make(map[int]int)
+	maxFreq := 0
+	for _, n := range numbers {
+		freq[n]++
+		if freq[n] > maxFreq {
+			maxFreq = freq[n]
+		}
+	}
+	if maxFreq == 1 {
+		return nil
+	}
+	for n, freq := range freq {
+		if freq == maxFreq {
+			mode = append(mode, n)
+		}
+	}
+	return mode
+}
+
+func IntSliceToString(slice []int) string {
+	var text strings.Builder
+	for i, num := range slice {
+		if i > 0 {
+			text.WriteString(", ")
+		}
+		text.WriteString(fmt.Sprintf("%d", num))
+	}
+	return text.String()
+}
+
 func CalculateAverageFromFloatSlice(numbers []float64) float64 {
 	if len(numbers) == 0 {
 		return 0
