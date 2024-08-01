@@ -99,10 +99,11 @@ func GetTournamentSchedule(w http.ResponseWriter, r *http.Request) {
 	if leagueCode == "" {
 		http.Error(w, "Missing required parameter league code", http.StatusBadRequest)
 	}
+	tournamentName := r.FormValue("tournament")
 
-	log.Printf("Params received - URL %s, LeagueCode %s", url, leagueCode)
+	log.Printf("Params received - URL %s, LeagueCode %s, Tournament name %s", url, leagueCode, tournamentName)
 
-	data := fetcher.GetScheduleOfTournament(url, leagueCode)
+	data := fetcher.GetScheduleOfTournament(url, leagueCode, tournamentName)
 	jsonData, err := utils.DataStructToJson(data)
 	if err != nil {
 		log.Println("Error marshaling JSON:", err)

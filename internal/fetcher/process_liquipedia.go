@@ -41,15 +41,18 @@ func LiquipediaMappedDataToString(data map[string]interface{}) string {
 	return content
 }
 
-func GetScheduleOfTournament(url, leagueCode string) []MatchScheduleData {
+func GetScheduleOfTournament(url, leagueCode, tournament string) []MatchScheduleData {
 	mapData := LiquipediaDataToMap(url)
 	data := LiquipediaMappedDataToString(mapData)
 	lines := strings.Split(data, "\n")
 	leagueCodeInt, _ := strconv.Atoi(leagueCode)
+	tournamentName := tournament
 
 	var schedule []MatchScheduleData
 	var currentMatch matchInfo
-	tournamentName := extractTournamentName(lines)
+	if tournamentName == "" {
+		tournamentName = extractTournamentName(lines)
+	}
 	isMatch := false
 	bestOf := 0
 
