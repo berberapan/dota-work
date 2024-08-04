@@ -105,6 +105,7 @@ func CalculateModeFromIntSlice(numbers []int) []int {
 }
 
 func IntSliceToString(slice []int) string {
+	slices.Sort(slice)
 	var text strings.Builder
 	for i, num := range slice {
 		if i > 0 {
