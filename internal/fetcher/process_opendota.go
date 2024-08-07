@@ -2,12 +2,54 @@ package fetcher
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"strconv"
 	"strings"
+	"time"
 
+	"github.com/berberapan/dota-work/internal/cache"
 	"github.com/berberapan/dota-work/internal/utils"
 )
+
+var compiledDataCache = &cache.Cache{}
+
+func GetCachedOrProcessedData(teamID, date string, count int) (CompiledTeamData, error) {
+	var matchHistory []TeamHistory
+
+	if date != "" {
+		matchHistory = GetListOfMatchesFromDate(date, teamID)
+	} else if count > 0 {
+		matchHistory = GetListOfMatchesFromCount(count, teamID)
+	} else {
+		return CompiledTeamData{}, fmt.Errorf("Invalid parameters")
+	}
+
+	if len(matchHistory) == 0 {
+		return CompiledTeamData{}, fmt.Errorf("No matches found")
+	}
+
+	cacheKey := createCacheKey(matchHistory, teamID)
+
+	if cachedData, found := compiledDataCache.Get(cacheKey); found {
+		return cachedData.(CompiledTeamData), nil
+	}
+
+	matchSlice := GetMatchDataFromTeamHistorySlice(matchHistory)
+	compiledData := ProcessMatchData(matchSlice, teamID)
+
+	compiledDataCache.Set(cacheKey, compiledData, 2*time.Hour)
+
+	return compiledData, nil
+}
+
+func createCacheKey(matches []TeamHistory, teamID string) string {
+	matchIDs := make([]string, len(matches))
+	for i, match := range matches {
+		matchIDs[i] = strconv.Itoa(match.MatchId)
+	}
+	return teamID + ":" + strings.Join(matchIDs, ",")
+}
 
 func GetListOfMatches(teamId string) []TeamHistory {
 	data := getTeamMatchHistoryApi(teamId)
@@ -257,4 +299,13 @@ func calculateMatchData(data *CompiledMatchData) {
 		data.TotalRoshansMedian = utils.CalculateMedianFromIntSlice(data.RoshanTotals)
 		data.TotalRoshansMode = utils.IntSliceToString(utils.CalculateModeFromIntSlice(data.RoshanTotals))
 	}
+}
+
+func init() {
+	go func() {
+		for {
+			time.Sleep(10 * time.Minute)
+			compiledDataCache.Cleanup()
+		}
+	}()
 }

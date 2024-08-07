@@ -38,38 +38,35 @@ func GetTeamData(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Params received - Team ID %s, Date %s, Count %s", id, date, count)
 
-	var jsonData []byte
+	var compiledData fetcher.CompiledTeamData
+	var processErr error
 
 	if date != "" {
-		matchHistory := fetcher.GetListOfMatchesFromDate(date, id)
-		if len(matchHistory) == 0 {
-			http.Error(w, "No matches found.", http.StatusNotFound)
-			return
-		}
-		matchSlice := fetcher.GetMatchDataFromTeamHistorySlice(matchHistory)
-		compiledData := fetcher.ProcessMatchData(matchSlice, id)
-		jsonData, err = utils.DataStructToJson(compiledData)
-		if err != nil {
-			log.Println(err)
-		}
-
+		compiledData, processErr = fetcher.GetCachedOrProcessedData(id, date, 0)
 	} else if count != "" {
-		conCount, err := strconv.Atoi(count)
-		if err != nil {
+		conCount, convErr := strconv.Atoi(count)
+		if convErr != nil {
 			http.Error(w, "Couldn't handle count given.", http.StatusBadRequest)
 			return
 		}
-		matchHistory := fetcher.GetListOfMatchesFromCount(conCount, id)
-		if len(matchHistory) == 0 {
+		compiledData, processErr = fetcher.GetCachedOrProcessedData(id, "", conCount)
+	}
+
+	if processErr != nil {
+		if processErr.Error() == "No matches found" {
 			http.Error(w, "No matches found.", http.StatusNotFound)
 			return
+		} else {
+			http.Error(w, "Error processing data: "+processErr.Error(), http.StatusInternalServerError)
 		}
-		matchSlice := fetcher.GetMatchDataFromTeamHistorySlice(matchHistory)
-		compiledData := fetcher.ProcessMatchData(matchSlice, id)
-		jsonData, err = utils.DataStructToJson(compiledData)
-		if err != nil {
-			log.Println(err)
-		}
+		return
+	}
+
+	jsonData, err := utils.DataStructToJson(compiledData)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Error converting data to JSON", http.StatusInternalServerError)
+		return
 	}
 
 	log.Println("Sending back response")
